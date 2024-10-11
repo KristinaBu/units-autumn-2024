@@ -3,19 +3,7 @@ import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { ProductCard } from './ProductCard';
 import { getPrice } from '../../utils';
-
-enum mockCategory {
-    Clothing = 'Одежда',
-}
-
-const mockProduct = {
-    id: 1,
-    name: 'p1',
-    description: 'd1',
-    price: 1,
-    imgUrl: '1',
-    category: mockCategory.Clothing,
-};
+import { mockProducts } from './mockProduct';
 
 jest.mock('../../utils/getPrice');
 
@@ -30,25 +18,29 @@ describe('ProductCard test', () => {
     });
 
     it('should render correctly', () => {
-        const rendered = render(<ProductCard {...mockProduct} />);
+        const rendered = render(<ProductCard {...mockProducts[0]} />);
         expect(rendered.asFragment()).toMatchSnapshot();
     });
 
     it('should display product details correctly', () => {
-        const rendered = render(<ProductCard {...mockProduct} />);
-        expect(rendered.getByText(mockProduct.name)).toBeInTheDocument();
-        expect(rendered.getByText(mockProduct.description)).toBeInTheDocument();
+        const rendered = render(<ProductCard {...mockProducts[0]} />);
+        expect(rendered.getByText(mockProducts[0].name)).toBeInTheDocument();
         expect(
-            rendered.getByText(getPrice(mockProduct.price))
+            rendered.getByText(mockProducts[0].description)
         ).toBeInTheDocument();
-        expect(rendered.getByText(mockProduct.category)).toBeInTheDocument();
-        expect(rendered.getByAltText(mockProduct.name)).toBeInTheDocument();
+        expect(
+            rendered.getByText(getPrice(mockProducts[0].price))
+        ).toBeInTheDocument();
+        expect(
+            rendered.getByText(mockProducts[0].category)
+        ).toBeInTheDocument();
+        expect(rendered.getByAltText(mockProducts[0].name)).toBeInTheDocument();
     });
     // точная проверка: ищется элемент и в нем ищется совпадение
     it('should display product name correctly', () => {
-        const rendered = render(<ProductCard {...mockProduct} />);
+        const rendered = render(<ProductCard {...mockProducts[0]} />);
         const nameElement = rendered.getByRole('heading', {
-            name: mockProduct.name,
+            name: mockProducts[0].name,
         });
         expect(nameElement).toBeInTheDocument();
     });
